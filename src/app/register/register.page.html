@@ -1,9 +1,37 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>register</ion-title>
+    <ion-title>REGISTER</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
+    <form id="register" [formGroup]="registerForm" (submit)="register(registerForm.value)">
+        <ion-list>
+          <ion-item>
+            <ion-label>Email:</ion-label>
+            <ion-input type="email" placeholder="example@example.com" formControlName="email"></ion-input>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label>Password:</ion-label>
+            <ion-input type="password" placeholder="minimum 6 characters" formControlName="password"></ion-input>
+          </ion-item>
+    
+          <ion-item>
+            <ion-label>Nickname:</ion-label>
+            <ion-input placeholder="Nickname" formControlName="nickname"></ion-input>
+          </ion-item>
+        
+        </ion-list>
+        
+        <ion-button expand="block" type="submit" [disabled]="!registerForm.valid">REGISTER</ion-button>
+      </form>
+    
+      <br>
+      <ion-item lines="none">
+        <ion-label class="ion-text-center">
+          Already have an account? &emsp; <a routerLink="/login">LOGIN</a>
+        </ion-label>
+      </ion-item>
 
 </ion-content>
