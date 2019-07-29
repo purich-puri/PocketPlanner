@@ -1,5 +1,7 @@
 {
   "name": "pocketplanner",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
