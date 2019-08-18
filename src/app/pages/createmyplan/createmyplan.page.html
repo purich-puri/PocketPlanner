@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+      </ion-buttons>
+    <ion-title>Create Plan</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>Title: </ion-label>
+      <ion-input placeholder="Plan name" [(ngModel)]="title"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Description:</ion-label>
+      <ion-textarea auto-grow="true" placeholder="Enter Description here" [(ngModel)]="description"></ion-textarea>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" (click)="createPlan()">CREATE</ion-button>
+  </ion-toolbar>
+</ion-footer>

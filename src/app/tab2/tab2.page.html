@@ -10,6 +10,13 @@
   <ion-button expand="block" (click)="gotoPage()">Create a new Trip</ion-button>
 
   <ion-list>
+    <ion-item button *ngFor="let plan of plans | async" text-wrap>
+      <ion-label text-wrap>
+        <ion-text color="primary">
+          <h3>{{ plan.title }}</h3>
+        </ion-text>
+      </ion-label>
+    </ion-item>
   </ion-list>
 
 </ion-content>

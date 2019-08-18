@@ -4,14 +4,15 @@
 
 export const environment = {
   production: false,
+  
   firebase: {
     apiKey: "AIzaSyDPiMv1gLbFhg7HxdOGkJXppVlMD6pcNV4",
-  authDomain: "pocketplanner-169f1.firebaseapp.com",
-  databaseURL: "https://pocketplanner-169f1.firebaseio.com",
-  projectId: "pocketplanner-169f1",
-  storageBucket: "pocketplanner-169f1.appspot.com",
-  messagingSenderId: "154535952027",
-  appId: "1:154535952027:web:9803325e89470ae3"
+    authDomain: "pocketplanner-169f1.firebaseapp.com",
+    databaseURL: "https://pocketplanner-169f1.firebaseio.com",
+    projectId: "pocketplanner-169f1",
+    storageBucket: "pocketplanner-169f1.appspot.com",
+    messagingSenderId: "154535952027",
+    appId: "1:154535952027:web:9803325e89470ae3"
   }
 };
 

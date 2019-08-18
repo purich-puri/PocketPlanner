@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
-//import 'firebase/firestore';
+import 'firebase/firestore';
 import { take, map, tap } from 'rxjs/operators';
  
 export interface UserCredentials {
@@ -19,11 +19,11 @@ export class AuthService {
   user: User = null;
   nickname = '';
  
-  constructor(private afAuth: AngularFireAuth, private afStore: AngularFirestore) {
+  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore) {
     this.afAuth.authState.subscribe(res => {
       this.user = res;
       if (this.user) {
-        this.afStore.doc(`users/${this.currentUserId}`).valueChanges().pipe(
+        this.db.doc(`users/${this.currentUserId}`).valueChanges().pipe(
           tap(res => {
             this.nickname = res['nickname'];
           })
@@ -35,7 +35,7 @@ export class AuthService {
   register(credentials: UserCredentials) {
     return this.afAuth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password)
       .then((data) => {
-        return this.afStore.doc(`users/${data.user.uid}`).set({
+        return this.db.doc(`users/${data.user.uid}`).set({
           nickname: credentials.nickname,
           email: data.user.email,
           created: firebase.firestore.FieldValue.serverTimestamp()
@@ -44,7 +44,7 @@ export class AuthService {
   }
  
   isNicknameAvailable(name) {
-    return this.afStore.collection('users', ref => ref.where('nickname', '==', name).limit(1)).valueChanges().pipe(
+    return this.db.collection('users', ref => ref.where('nickname', '==', name).limit(1)).valueChanges().pipe(
       take(1),
       map(user =>{
         return user;
@@ -65,7 +65,7 @@ export class AuthService {
   }
  
   updateUser(nickname) {
-    return this.afStore.doc(`users/${this.currentUserId}`).update({
+    return this.db.doc(`users/${this.currentUserId}`).update({
       nickname
     });
   }

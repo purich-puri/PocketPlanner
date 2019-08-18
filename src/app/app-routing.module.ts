@@ -15,10 +15,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'tripplanner', loadChildren: './pages/tripplanner/tripplanner.module#TripplannerPageModule' },
-  {
-    path: 'tab2',
-    loadChildren: () => import('./tab2/tab2.module').then(m => m.Tab2PageModule)
-  }
+  { path: 'createmyplan', loadChildren: './pages/createmyplan/createmyplan.module#CreatemyplanPageModule' },
+  { path: 'planner', loadChildren: './pages/planner/planner.module#PlannerPageModule' }
 ];
 @NgModule({
   imports: [
