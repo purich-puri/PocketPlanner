@@ -31,11 +31,14 @@ export class PlanService {
       created: firebase.firestore.FieldValue.serverTimestamp()
     }).then(res => {
     });
+  }
+
+  shareYourPlan(id){
 
   }
 
    getPlans(){
-      console.log(this.auth.currentUserId);
+      //console.log(this.auth.currentUserId);
       return this.db.collection(`users/${this.auth.currentUserId}/plans`, ref => ref.orderBy('created', 'desc')).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data();
@@ -43,5 +46,9 @@ export class PlanService {
         return {id, ...data};
       }))
     ) 
+   }
+
+   deletePlan(id){
+     return this.db.doc(`users/${this.auth.currentUserId}/plans/${id}`).delete();
    }
 }

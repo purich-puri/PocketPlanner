@@ -1,9 +1,26 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>planner</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="delete()">
+        <ion-icon color="danger" name="trash" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
+  <ion-button expand="block" (click)="goToPage()">Add destination</ion-button>
+
+  <ion-list>
+    <ion-label>list of destination here</ion-label>
+  </ion-list>
 
 </ion-content>
+
+<ion-footer padding>
+  <ion-button expand="block" (click)="sharePlan()">SHARE</ion-button>
+</ion-footer>

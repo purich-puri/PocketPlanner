@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
       <ion-buttons slot="start">
-          <ion-back-button defaultHref="/tab2"></ion-back-button>
+          <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
       </ion-buttons>
     <ion-title>My Plans</ion-title>
   </ion-toolbar>
@@ -9,5 +9,25 @@
 
 <ion-content >
   <div #map id="map"></div>
+  
+  <ion-list>
+    <ion-item>
+      <ion-label>Destination A:</ion-label>
+      <ion-input placeholde="Destination A"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label>Destination B:</ion-label>
+        <ion-input placeholde="Destination B"></ion-input>
+      </ion-item>
+
+
+  </ion-list>
+
 
 </ion-content>
+
+<ion-footer padding>
+  <ion-button expand="block">SAVE</ion-button>
+
+</ion-footer>

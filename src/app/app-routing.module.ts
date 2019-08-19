@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   { path: 'tripplanner', loadChildren: './pages/tripplanner/tripplanner.module#TripplannerPageModule' },
   { path: 'createmyplan', loadChildren: './pages/createmyplan/createmyplan.module#CreatemyplanPageModule' },
-  { path: 'planner', loadChildren: './pages/planner/planner.module#PlannerPageModule' }
+  { path: 'planner/:id', loadChildren: './pages/planner/planner.module#PlannerPageModule' }
 ];
 @NgModule({
   imports: [
