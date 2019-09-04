@@ -34,6 +34,12 @@ export class PlanService {
   }
 
   shareYourPlan(id){
+    // this.db.doc(`users/${this.auth.currentUserId}/plans/${id}`)
+    // .get().then(doc => {
+    //   if(!doc.exists){
+
+    //   }
+    // });
 
   }
 

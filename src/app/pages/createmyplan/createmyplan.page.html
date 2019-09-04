@@ -14,11 +14,21 @@
       <ion-input placeholder="Plan name" [(ngModel)]="title"></ion-input>
     </ion-item>
 
+    <ion-item (click)="showPicker()">
+      <ion-label>Tag:</ion-label>
+      <ion-label>{{countryName}}</ion-label>
+      <ion-button slot="end" fill="clear" >
+        <ion-icon name="arrow-dropdown-circle"></ion-icon>
+      </ion-button>
+    </ion-item>
+
     <ion-item>
       <ion-label>Description:</ion-label>
       <ion-textarea auto-grow="true" placeholder="Enter Description here" [(ngModel)]="description"></ion-textarea>
     </ion-item>
   </ion-list>
+
+  
 
 </ion-content>
 
