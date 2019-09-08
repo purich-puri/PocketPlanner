@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ title }}</ion-title>
+    <ion-title>My Destinations</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="delete()">
         <ion-icon color="danger" name="trash" slot="icon-only"></ion-icon>
@@ -14,9 +14,16 @@
 
 <ion-content padding>
   <ion-button expand="block" (click)="goToPage()">Add destination</ion-button>
+  <br>
 
   <ion-list>
-    <ion-label>list of destination here</ion-label>
+    <ion-item *ngFor="let destination of destinations | async">
+      <ion-label>
+        <h3>From: {{destination.startpoint}}</h3>
+        <h3>To: {{destination.endpoint}}</h3>
+      </ion-label>
+      <ion-icon color="primary" name="navigate" slot="end"></ion-icon>
+    </ion-item>
   </ion-list>
 
 </ion-content>

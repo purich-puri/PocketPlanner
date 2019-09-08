@@ -10,21 +10,20 @@
 <ion-content >
   <div #map id="map"></div>
   
-  <form [formGroup]="directionForm" (submit)="calculateAndDisplayRoute(directionForm.value)">
+
     <ion-list>
       <ion-item>
         <ion-label>Start:</ion-label>
-        <ion-input id="startInput" type="text" formControlName="startRoute" placeholder="Destination A"></ion-input>
+        <ion-input [(ngModel)]="startInput" type="text" placeholder="Destination A"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label>End:</ion-label>
-        <ion-input id="endInput" type="text" formControlName="endRoute" placeholder="Destination B"></ion-input>
+        <ion-input [(ngModel)]="endInput" type="text" placeholder="Destination B"></ion-input>
       </ion-item>
 
-      <ion-button class="ion-padding-horizontal" expand="block" type="submit" [disabled]="!directionForm.valid">GET DIRECTION</ion-button>
+      <ion-button class="ion-padding-horizontal" expand="block" type="submit" (click)="calculateAndDisplayRoute()">GET DIRECTION</ion-button>
     </ion-list>
-  </form>
 
   <div #bottomPanel id="bottomPanel"></div>
 
@@ -32,6 +31,6 @@
 </ion-content>
 
 <ion-footer padding>
-  <ion-button expand="block">SAVE</ion-button>
+  <ion-button expand="block" (click)="saveDestinationOnline()">SAVE</ion-button>
 
 </ion-footer>

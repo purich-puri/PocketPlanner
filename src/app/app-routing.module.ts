@@ -15,6 +15,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'tripplanner', loadChildren: './pages/tripplanner/tripplanner.module#TripplannerPageModule' },
+  { path: 'tripplanner/:id', loadChildren: './pages/tripplanner/tripplanner.module#TripplannerPageModule' },
   { path: 'createmyplan', loadChildren: './pages/createmyplan/createmyplan.module#CreatemyplanPageModule' },
   { path: 'planner/:id', loadChildren: './pages/planner/planner.module#PlannerPageModule' }
 ];

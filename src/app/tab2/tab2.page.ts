@@ -22,6 +22,7 @@ export class Tab2Page implements OnInit {
   ngOnInit(){
     this.afAuth.auth.onAuthStateChanged(user => {
       if(user){
+        //console.log(user);
         this.plans = this.planService.getPlans();
       }
       else{

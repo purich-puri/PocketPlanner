@@ -33,6 +33,15 @@ export class PlanService {
     });
   }
 
+  saveDestination(planID, startPoint, endPoint){
+    return this.db.collection(`users/${this.auth.currentUserId}/plans/${planID}/destination`).add({
+      startpoint: startPoint,
+      endpoint: endPoint,
+      created: firebase.firestore.FieldValue.serverTimestamp()
+    }).then( res => {
+    });
+  }
+
   shareYourPlan(id){
     // this.db.doc(`users/${this.auth.currentUserId}/plans/${id}`)
     // .get().then(doc => {
@@ -46,6 +55,16 @@ export class PlanService {
    getPlans(){
       //console.log(this.auth.currentUserId);
       return this.db.collection(`users/${this.auth.currentUserId}/plans`, ref => ref.orderBy('created', 'desc')).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+        return {id, ...data};
+      }))
+    ) 
+   }
+
+   getDestinations(planID){
+    return this.db.collection(`users/${this.auth.currentUserId}/plans/${planID}/destination`, ref => ref.orderBy('created', 'asc')).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;
