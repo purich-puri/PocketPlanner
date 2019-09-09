@@ -25,8 +25,8 @@ export class TripplannerPage implements OnInit, AfterViewInit {
 
   originPlaceId = null;
   destinationPlaceId = null;
-  //originInput = document.getElementById('startInput');
-  //destinationInput = document.getElementById('endInput');
+  originInput = document.getElementById('startInput');
+  destinationInput = document.getElementById('endInput');
 
   originAutocomplete = new google.maps.places.Autocomplete(this.startInput);
   destinationAutocomplete = new google.maps.places.Autocomplete(this.endInput);
@@ -81,19 +81,35 @@ export class TripplannerPage implements OnInit, AfterViewInit {
 
 
   saveDestinationOnline(){
-    console.log(this.startInput);
-    console.log(this.endInput);
-
-    this.planService.saveDestination(this.planID , this.startInput, this.endInput)
-    .then(async res => {
-      this.router.navigate(["/planner/" + this.planID]);
-      let toast = await this.toastCtrl.create({
-        duration: 1000,
-        color: 'success',
-        message: 'destination saved!'
-      });
-      toast.present();
-    })
+    // console.log(this.startInput);
+    // console.log(this.endInput);
+    const that = this;
+    this.directionsService.route(
+      {
+        origin: this.startInput,
+        destination: this.endInput,
+        travelMode: 'TRANSIT'
+      }, (response, status) => {
+        if(status === 'OK'){
+        // that.directionsDisplay.setDirections(response);
+        // console.log(response);
+        this.planService.saveDestination(this.planID , this.startInput, this.endInput)
+        .then(async res => {
+          this.router.navigate(["/planner/" + this.planID]);
+          let toast = await this.toastCtrl.create({
+            duration: 1000,
+            color: 'success',
+            message: 'destination saved!'
+          });
+          toast.present();
+        })
+        }
+        else{
+          console.log("failed due to: " + status);
+          
+        }
+      }
+    )
   }
 
   async calculateAndDisplayRoute(){

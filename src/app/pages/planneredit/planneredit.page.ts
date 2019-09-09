@@ -65,6 +65,35 @@ export class PlannereditPage implements OnInit {
 
   }
 
+  async saveEdit(){
+    if(this.startInput == null || this.endInput == null){
+      let toast = await this.toastCtrl.create({
+        duration: 2000,
+        color: 'danger',
+        message: 'Please fill all destination'
+      });
+      toast.present();
+    }
+    else{
+      const that = this;
+      this.directionsService.route(
+        {
+          origin: this.startInput,
+          destination: this.endInput,
+          travelMode: 'TRANSIT'
+        }, (response, status) => {
+          if(status === 'OK'){
+          // that.directionsDisplay.setDirections(response);
+          // console.log(response);
+          }
+          else{
+            console.log("failed due to: " + status);
+          }
+        }
+      )
+    }
+  }
+
   async delete(){
     let alert = await this.alertCtrl.create({
       header: 'Delete',

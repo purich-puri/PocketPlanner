@@ -6,8 +6,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <br>
+<ion-content padding>
   <ion-toolbar>
       <ion-searchbar showCancelButton="focus"></ion-searchbar>
   </ion-toolbar>
@@ -15,7 +14,7 @@
 
   <ion-card *ngFor="let plan of plans | async">
     <ng-container *ngIf="(plan | async)?.isShown == true">
-      <ion-card-header button [routerLink]="['/' , 'planner' , (plan | async)?.id || 0]">
+      <ion-card-header button [routerLink]="['/' , 'planner' , (plan | async)?.id || 0]" (click)="addViewCount()">
         <ion-card-subtitle>Destination</ion-card-subtitle>
         <ion-card-title>{{ (plan | async)?.title }}</ion-card-title>
       </ion-card-header>

@@ -37,12 +37,12 @@ export class PlannerPage implements OnInit {
       console.log(this.planID);
     };
 
-    this.route.params.subscribe(data => {
-      this.planService.getOneGroup(data.id).subscribe(res => {
-        this.plan = res;
-        console.log(this.plan.id);
-      })
-    });
+    // this.route.params.subscribe(data => {
+    //   this.planService.getOneGroup(data.id).subscribe(res => {
+    //     this.plan = res;
+    //     console.log(this.plan.id);
+    //   })
+    // });
 
     this.afAuth.auth.onAuthStateChanged(user => {
       if(user){
@@ -99,6 +99,7 @@ export class PlannerPage implements OnInit {
 
   sharePlan(){
     this.planService.shareYourPlan(this.planID, this.isShown = true);
+    this.router.navigate(["/tab/tab2"]);
   }
 
 }

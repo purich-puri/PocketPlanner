@@ -28,7 +28,10 @@ export class Tab1Page {
       else{
         console.log("not logged in");
       }
-    });
+    }); 
+  }
+
+  async addViewCount(){
     
   }
 }
