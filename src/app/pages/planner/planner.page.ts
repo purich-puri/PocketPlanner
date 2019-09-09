@@ -16,6 +16,8 @@ export class PlannerPage implements OnInit {
 
   title: Observable<any>;
   planID = null;
+  plan = null;
+  isShown: boolean;
   destinations: Observable<any>;
 
   constructor(
@@ -32,8 +34,15 @@ export class PlannerPage implements OnInit {
   ngOnInit() {
     this.planID = this.route.snapshot.params['id'];
     if(this.planID){
-      // console.log(this.planID);
+      console.log(this.planID);
     };
+
+    this.route.params.subscribe(data => {
+      this.planService.getOneGroup(data.id).subscribe(res => {
+        this.plan = res;
+        console.log(this.plan.id);
+      })
+    });
 
     this.afAuth.auth.onAuthStateChanged(user => {
       if(user){
@@ -48,7 +57,11 @@ export class PlannerPage implements OnInit {
   }
 
   goToPage(){
-    this.router.navigate(["/tripplanner/" + this.title]);
+    this.router.navigate(["/tripplanner/" + this.planID]);
+  }
+
+  goToPlannerEdit(destID){
+    this.router.navigate(["/planneredit/", {id: this.planID, id2: destID}]);
   }
 
   async delete(){
@@ -68,7 +81,7 @@ export class PlannerPage implements OnInit {
           text: 'DELETE',
           cssClass: 'alertDanger',
           handler: async () => {
-            this.planService.deletePlan(this.planID);
+            //this.planService.deletePlan(this.plan.id);
             this.router.navigate(["/tabs/tab2"]);
 
             let toast = await this.toastCtrl.create({
@@ -85,7 +98,7 @@ export class PlannerPage implements OnInit {
   }
 
   sharePlan(){
-    this.planService.shareYourPlan(this.planID);
+    this.planService.shareYourPlan(this.planID, this.isShown = true);
   }
 
 }

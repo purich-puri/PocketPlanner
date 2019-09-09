@@ -17,7 +17,8 @@
   <br>
 
   <ion-list>
-    <ion-item *ngFor="let destination of destinations | async">
+    <ion-item *ngFor="let destination of destinations | async"
+    (click)="goToPlannerEdit(destination.id)">
       <ion-label>
         <h3>From: {{destination.startpoint}}</h3>
         <h3>To: {{destination.endpoint}}</h3>

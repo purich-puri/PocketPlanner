@@ -17,7 +17,11 @@ const routes: Routes = [
   { path: 'tripplanner', loadChildren: './pages/tripplanner/tripplanner.module#TripplannerPageModule' },
   { path: 'tripplanner/:id', loadChildren: './pages/tripplanner/tripplanner.module#TripplannerPageModule' },
   { path: 'createmyplan', loadChildren: './pages/createmyplan/createmyplan.module#CreatemyplanPageModule' },
-  { path: 'planner/:id', loadChildren: './pages/planner/planner.module#PlannerPageModule' }
+  { path: 'planner/:id', loadChildren: './pages/planner/planner.module#PlannerPageModule' },
+  { path: 'tab2description', loadChildren: './pages/tab2description/tab2description.module#Tab2descriptionPageModule' },
+  { path: 'tab2description/:id', loadChildren: './pages/tab2description/tab2description.module#Tab2descriptionPageModule' },
+  { path: 'planneredit', loadChildren: './pages/planneredit/planneredit.module#PlannereditPageModule' },
+  { path: 'planneredit/:id/:id2', loadChildren: './pages/planneredit/planneredit.module#PlannereditPageModule' }
 ];
 @NgModule({
   imports: [

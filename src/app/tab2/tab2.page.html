@@ -10,17 +10,15 @@
   <ion-button expand="block" (click)="gotoPage()">Create a new Trip</ion-button>
   <br/>
 
-  <ion-card button *ngFor="let plan of plans | async"
-  [routerLink]="['/' , 'planner' , plan.id || 0]">
-
-    <img src="assets/IMG_0553.jpeg">
-    <ion-card-header>
+  <ion-card *ngFor="let plan of plans | async">
+    <!-- <img src="assets/IMG_0553.jpeg" button [routerLink]="['/' , 'planner' , plan.id || 0]"> -->
+    <ion-card-header button [routerLink]="['/' , 'planner' , (plan | async)?.id || 0]">
       <ion-card-subtitle>Destination</ion-card-subtitle>
-      <ion-card-title>{{ plan.title }}</ion-card-title>
+      <ion-card-title>{{ (plan | async)?.title }}</ion-card-title>
     </ion-card-header>
   
-    <ion-card-content>
-      <!-- {{ plan.description | slice:0:150 }} -->
+    <ion-card-content button [routerLink]="['/' , 'tab2description' , plan.id || 0]">
+      <ion-text color="primary">Read description</ion-text>
     </ion-card-content>
   </ion-card>
 

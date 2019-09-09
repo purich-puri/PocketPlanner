@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { PlanService } from '../services/plan.service';
+import { Observable } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-tab1',
@@ -7,6 +11,24 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() {}
+  plans: Observable<any>;
 
+  constructor(
+    private router: Router,
+    private planService: PlanService,
+    private afAuth: AngularFireAuth
+  ) {}
+
+  ngOnInit(){
+    this.afAuth.auth.onAuthStateChanged(user => {
+      if(user){
+        //console.log(user);
+        this.plans = this.planService.getPlans();
+      }
+      else{
+        console.log("not logged in");
+      }
+    });
+    
+  }
 }

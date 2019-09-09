@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { take, map, switchMap } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin, from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,22 @@ export class PlanService {
     private afAuth: AngularFireAuth
   ) { }
 
+  // createPlan(title, description){
+  //   let currentUser = {
+  //     email: this.auth.currentUser.email,
+  //     id: this.auth.currentUserId,
+  //     displayName: this.auth.nickname
+  //   }
+
+  //   return this.db.collection(`users/${this.auth.currentUserId}/plans`).add({
+  //     title: title,
+  //     description: description,
+  //     owner: currentUser,
+  //     created: firebase.firestore.FieldValue.serverTimestamp()
+  //   }).then(res => {
+  //   });
+  // }
+
   createPlan(title, description){
     let currentUser = {
       email: this.auth.currentUser.email,
@@ -24,17 +40,66 @@ export class PlanService {
       displayName: this.auth.nickname
     }
 
-    return this.db.collection(`users/${this.auth.currentUserId}/plans`).add({
+    return this.db.collection(`allPlans`).add({
       title: title,
       description: description,
+      //tag: countryName,
       owner: currentUser,
-      created: firebase.firestore.FieldValue.serverTimestamp()
+      created: firebase.firestore.FieldValue.serverTimestamp(),
+      isShown: false,
+      viewCount: []
     }).then(res => {
+      let promises = [];
+ 
+      let oneAdd = this.db.collection(`users/${this.auth.currentUserId}/plans`).add({
+        id: res.id
+      });
+      promises.push(oneAdd);
+      return Promise.all(promises);
     });
   }
 
+  shareYourPlan(id, isShown){
+    return this.db.doc(`allPlans/${id}`).update({
+      isShown
+    });
+  }
+
+  //  getPlans(){
+  //     //console.log(this.auth.currentUserId);
+  //     return this.db.collection(`users/${this.auth.currentUserId}/plans`, ref => ref.orderBy('created', 'desc')).snapshotChanges().pipe(
+  //     map(actions => actions.map(a => {
+  //       const data = a.payload.doc.data();
+  //       const id = a.payload.doc.id;
+  //       return {id, ...data};
+  //     }))
+  //   ) 
+  //  }
+
+  getPlans() {
+    console.log(this.auth.currentUserId);
+    return this.db.collection(`users/${this.auth.currentUserId}/plans`).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data();
+        const user_group_key = a.payload.doc.id;
+        return this.getOneGroup(data['id'], user_group_key);
+      }))
+    )
+  }
+
+  getOneGroup(id, user_group_key = null) {
+    return this.db.doc(`allPlans/${id}`).snapshotChanges().pipe(
+      take(1),
+      map(changes => {
+        const data = changes.payload.data();
+        const group_id = changes.payload.id;
+        return { user_group_key, id: group_id, ...data };
+      })
+    )
+  }
+
   saveDestination(planID, startPoint, endPoint){
-    return this.db.collection(`users/${this.auth.currentUserId}/plans/${planID}/destination`).add({
+    return this.db.collection(`allPlans/${planID}/destinations`).add({
       startpoint: startPoint,
       endpoint: endPoint,
       created: firebase.firestore.FieldValue.serverTimestamp()
@@ -42,29 +107,8 @@ export class PlanService {
     });
   }
 
-  shareYourPlan(id){
-    // this.db.doc(`users/${this.auth.currentUserId}/plans/${id}`)
-    // .get().then(doc => {
-    //   if(!doc.exists){
-
-    //   }
-    // });
-
-  }
-
-   getPlans(){
-      //console.log(this.auth.currentUserId);
-      return this.db.collection(`users/${this.auth.currentUserId}/plans`, ref => ref.orderBy('created', 'desc')).snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data();
-        const id = a.payload.doc.id;
-        return {id, ...data};
-      }))
-    ) 
-   }
-
    getDestinations(planID){
-    return this.db.collection(`users/${this.auth.currentUserId}/plans/${planID}/destination`, ref => ref.orderBy('created', 'asc')).snapshotChanges().pipe(
+    return this.db.collection(`allPlans/${planID}/destinations`, ref => ref.orderBy('created', 'asc')).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data();
         const id = a.payload.doc.id;
@@ -73,7 +117,36 @@ export class PlanService {
     ) 
    }
 
-   deletePlan(id){
-     return this.db.doc(`users/${this.auth.currentUserId}/plans/${id}`).delete();
+   getDestinationEdit(planID, destID){
+    return this.db.doc(`allPlans/${planID}/destinations/${destID}`);
    }
+
+  //  deletePlan(id){
+  //    return this.db.doc(`allPlans/${id}`).delete();
+  //  }
+
+  // deletePlan(planID){
+  //   return this.getPlans().pipe(
+  //     switchMap(userGroups => {
+  //       return forkJoin(userGroups);
+  //     }),
+  //     map(data => {
+  //       let toDelete = null;
+ 
+  //       for (let plan of data) {
+  //         if (plan.id == planID) {
+  //           toDelete = plan.user_group_key;
+  //         }
+  //       }
+  //       return toDelete;
+  //     }),
+  //     switchMap(deleteId => {
+  //       return from(this.db.doc(`users/${this.auth.currentUserId}/plans/${deleteId}`).delete())
+  //     }))
+  // }
+
+   deleteDestination(planID, destinationID){
+    return this.db.doc(`allPlans/${planID}/destinations/${destinationID}`).delete();
+   }
+     
 }

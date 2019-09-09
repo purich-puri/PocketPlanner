@@ -37,7 +37,7 @@ export class CreatemyplanPage implements OnInit {
       buttons: [
         {
           text: 'Cancel',
-          role: 'cancel'
+          role: 'cancel',
         },
         {
           text: 'Done'

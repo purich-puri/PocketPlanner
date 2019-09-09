@@ -22,7 +22,6 @@ export class TripplannerPage implements OnInit, AfterViewInit {
 
   directionsService = new google.maps.DirectionsService;
   directionsDisplay = new google.maps.DirectionsRenderer;
-  directionForm: FormGroup;
 
   originPlaceId = null;
   destinationPlaceId = null;
@@ -53,7 +52,7 @@ export class TripplannerPage implements OnInit, AfterViewInit {
     this.planID = this.route.snapshot.params['id'];
     if(this.planID){
       console.log(this.planID);
-    }
+    };
   }
 
   ngAfterViewInit(){

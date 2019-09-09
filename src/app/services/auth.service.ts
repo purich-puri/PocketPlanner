@@ -19,7 +19,10 @@ export class AuthService {
   user: User = null;
   nickname = '';
  
-  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore) {
+  constructor(
+    private afAuth: AngularFireAuth, 
+    private db: AngularFirestore
+    ) {
     this.afAuth.authState.subscribe(res => {
       this.user = res;
       if (this.user) {
