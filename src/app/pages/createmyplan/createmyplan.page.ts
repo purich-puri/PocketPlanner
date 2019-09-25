@@ -3,6 +3,7 @@ import { PlanService } from 'src/app/services/plan.service';
 import { Router } from '@angular/router';
 import { PickerController } from '@ionic/angular';
 import { PickerOptions } from '@ionic/core';
+import { empty } from 'rxjs';
 
 @Component({
   selector: 'app-createmyplan',
@@ -25,10 +26,15 @@ export class CreatemyplanPage implements OnInit {
   }
 
   createPlan(){
-    this.planService.createPlan(this.title, this.description)
-    .then( res => {
-      this.router.navigate(['/tabs/tab2']);
-    })
+    if(this.title != ''){
+      this.planService.createPlan(this.title, this.description)
+      .then( res => {
+        this.router.navigate(['/tabs/tab2']);
+      })
+    }
+    else{
+      console.log("title empty");
+    }
   }
 
   async showPicker(){

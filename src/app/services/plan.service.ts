@@ -65,6 +65,23 @@ export class PlanService {
     });
   }
 
+  editDescriptionInfo(planID, description){
+    return this.db.doc(`allPlans/${planID}`).update({
+      description
+    });
+  }
+
+  editDestination(planID, DestID, start, end){
+    return this.db.doc(`allPlans/${planID}/destinations/${DestID}`).update({
+      startpoint: start,
+      endpoint: end
+    });
+  }
+
+  updateViewCounter(planID, userID){
+    
+  }
+
   //  getPlans(){
   //     //console.log(this.auth.currentUserId);
   //     return this.db.collection(`users/${this.auth.currentUserId}/plans`, ref => ref.orderBy('created', 'desc')).snapshotChanges().pipe(
@@ -76,8 +93,18 @@ export class PlanService {
   //   ) 
   //  }
 
+  getAllPlans(){
+    return this.db.collection(`allPlans`).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+        return {id, ...data};
+      }))
+    )
+  }
+
   getPlans() {
-    console.log(this.auth.currentUserId);
+    //console.log("userID: " + this.auth.currentUserId);
     return this.db.collection(`users/${this.auth.currentUserId}/plans`).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data();
@@ -125,25 +152,30 @@ export class PlanService {
   //    return this.db.doc(`allPlans/${id}`).delete();
   //  }
 
-  // deletePlan(planID){
-  //   return this.getPlans().pipe(
-  //     switchMap(userGroups => {
-  //       return forkJoin(userGroups);
-  //     }),
-  //     map(data => {
-  //       let toDelete = null;
+  deletePlan(planID){
+    return this.getPlans().pipe(
+      switchMap(userGroups => {
+        return forkJoin(userGroups);
+      }),
+      map(data => {
+        let toDelete = null;
  
-  //       for (let plan of data) {
-  //         if (plan.id == planID) {
-  //           toDelete = plan.user_group_key;
-  //         }
-  //       }
-  //       return toDelete;
-  //     }),
-  //     switchMap(deleteId => {
-  //       return from(this.db.doc(`users/${this.auth.currentUserId}/plans/${deleteId}`).delete())
-  //     }))
-  // }
+        for (let plan of data) {
+          if (plan.id == planID) {
+            toDelete = plan.user_group_key;
+          }
+        }
+        //console.log(toDelete);
+        return toDelete;
+      }),
+      switchMap(deleteId => {
+        return from(this.db.doc(`users/${this.auth.currentUserId}/plans/${deleteId}`).delete())
+      }),
+      switchMap(() => {
+        return from(this.db.doc(`allPlans/${planID}`).delete())
+      })
+    );
+  }
 
    deleteDestination(planID, destinationID){
     return this.db.doc(`allPlans/${planID}/destinations/${destinationID}`).delete();

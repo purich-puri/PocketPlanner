@@ -16,9 +16,10 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { FilterPipe } from './pipes/filter.pipe';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, FilterPipe],
   entryComponents: [],
   imports: [
     BrowserModule, 

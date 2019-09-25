@@ -5,6 +5,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -19,35 +20,55 @@ export class PlannerPage implements OnInit {
   plan = null;
   isShown: boolean;
   destinations: Observable<any>;
+  currentUser = null;
+  planOwner: any;
+  planOwnerID = null;
+  headerName = "My Destination";
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private planService: PlanService,
+    private authService: AuthService,
     private afAuth: AngularFireAuth,
     private db: AngularFirestore,
-    private auth: AuthService,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
     this.planID = this.route.snapshot.params['id'];
-    if(this.planID){
-      console.log(this.planID);
-    };
+    if(this.planID == 0 || this.planID == null){
+      return;
+    }
+    else{
+      //console.log(this.planID);
+      this.destinations = this.planService.getDestinations(this.planID);
+      this.db.doc(`allPlans/${this.planID}`).valueChanges().pipe(
+        tap(res => {
+          this.isShown = res['isShown'];
+          this.headerName = res['title'];
+          this.planOwner = res['owner'];
+          this.planOwnerID = this.planOwner.id;
+          //console.log("planOwnerID: " + this.planOwnerID);
+          //console.log("currentUser: " + this.currentUser);
+        })
+      ).subscribe();
+    }
 
-    // this.route.params.subscribe(data => {
-    //   this.planService.getOneGroup(data.id).subscribe(res => {
-    //     this.plan = res;
-    //     console.log(this.plan.id);
-    //   })
-    // });
+    
+    this.currentUser = this.authService.currentUserId;
+    
+    this.route.params.subscribe(data => {
+      this.planService.getOneGroup(data.id).subscribe(res => {
+        this.plan = res;
+        //console.log(this.plan);
+      })
+    });
 
     this.afAuth.auth.onAuthStateChanged(user => {
       if(user){
         //console.log(user);
-        this.destinations = this.planService.getDestinations(this.planID);
       }
       else{
         console.log("not logged in");
@@ -81,9 +102,9 @@ export class PlannerPage implements OnInit {
           text: 'DELETE',
           cssClass: 'alertDanger',
           handler: async () => {
-            //this.planService.deletePlan(this.plan.id);
-            this.router.navigate(["/tabs/tab2"]);
-
+            this.planService.deletePlan(this.plan.id).subscribe( res => {
+              this.router.navigate(["/tabs/tab2"]);
+            });
             let toast = await this.toastCtrl.create({
               duration: 2000,
               color: 'danger',
@@ -97,9 +118,9 @@ export class PlannerPage implements OnInit {
     await alert.present(); 
   }
 
-  sharePlan(){
-    this.planService.shareYourPlan(this.planID, this.isShown = true);
-    this.router.navigate(["/tab/tab2"]);
+  sharePlan(bool){
+    this.planService.shareYourPlan(this.planID, bool);
+    this.router.navigate(["/tabs/tab2"]);
   }
 
 }

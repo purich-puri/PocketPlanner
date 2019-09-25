@@ -16,23 +16,34 @@
     <div #map id="map"></div>
     
   
-      <ion-list>
+      <ion-list *ngIf="currentUser == planOwnerID">
         <ion-item>
-          <ion-label>Start:</ion-label>
-          <ion-input [(ngModel)]="startInput" type="text"></ion-input>
+          <ion-label>From:</ion-label>
+          <ion-input [(ngModel)]="startInput" (ionChange)="calculateDistance()" type="text"></ion-input>
         </ion-item>
   
         <ion-item>
-          <ion-label>End:</ion-label>
-          <ion-input [(ngModel)]="endInput" type="text" placeholder="Destination B"></ion-input>
+          <ion-label>To:</ion-label>
+          <ion-input [(ngModel)]="endInput" (ionChange)="calculateDistance()" type="text"></ion-input>
         </ion-item>
       </ion-list>
+
+      <ion-list *ngIf="currentUser != planOwnerID">
+          <ion-item>
+            <ion-label>From: {{startInput}}</ion-label>
+          </ion-item>
+    
+          <ion-item>
+            <ion-label>To: {{endInput}}</ion-label>
+          </ion-item>
+        </ion-list>
   
     <div #bottomPanel id="bottomPanel"></div>
-  
-  
+
   </ion-content>
   
-  <ion-footer padding>
-    <ion-button expand="block" (click)="saveEdit()">SAVE</ion-button>
+  <ion-footer *ngIf="currentUser == planOwnerID">
+    <ion-toolbar padding-horizontal>
+    <ion-button expand="block" color="natureGreen" (click)="saveEdit()">SAVE</ion-button>
+    </ion-toolbar>
   </ion-footer>

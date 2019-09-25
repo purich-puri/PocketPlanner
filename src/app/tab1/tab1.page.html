@@ -7,23 +7,21 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-toolbar>
-      <ion-searchbar showCancelButton="focus"></ion-searchbar>
-  </ion-toolbar>
-  <br>
 
-  <ion-card *ngFor="let plan of plans | async">
-    <ng-container *ngIf="(plan | async)?.isShown == true">
-      <ion-card-header button [routerLink]="['/' , 'planner' , (plan | async)?.id || 0]" (click)="addViewCount()">
+    <ion-searchbar [(ngModel)]="searchText" showCancelButton="focus"></ion-searchbar>
+
+  <ion-card *ngFor="let plan of plans | async" class="bgWhite">
+    <ng-container *ngIf="plan?.isShown == true">
+      <ion-card-header button [routerLink]="['/' , 'planner' , plan?.id || 0]">
         <ion-card-subtitle>Destination</ion-card-subtitle>
-        <ion-card-title>{{ (plan | async)?.title }}</ion-card-title>
+        <ion-card-title>{{ plan?.title }}</ion-card-title>
       </ion-card-header>
     
       <ion-card-content button [routerLink]="['/' , 'tab2description' , plan.id || 0]">
         <ion-text color="primary">Read description</ion-text>
         <br>
-        <ion-icon name="eye"></ion-icon>
-        <ion-text>{{ (plan | async)?.viewCount.length }}</ion-text>
+        <ion-icon class="icon" name="eye"></ion-icon>
+        <ion-text class="text">{{ plan?.viewCount.length }}</ion-text>
       </ion-card-content>
     </ng-container>
   </ion-card>

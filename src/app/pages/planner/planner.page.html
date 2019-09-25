@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
     </ion-buttons>
-    <ion-title>My Destinations</ion-title>
+    <ion-title>{{headerName}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="delete()">
         <ion-icon color="danger" name="trash" slot="icon-only"></ion-icon>
@@ -13,7 +13,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-button expand="block" (click)="goToPage()">Add destination</ion-button>
+  <ion-button expand="block" color="natureGreen" (click)="goToPage()">Add destination</ion-button>
   <br>
 
   <ion-list>
@@ -29,6 +29,9 @@
 
 </ion-content>
 
-<ion-footer padding>
-  <ion-button expand="block" (click)="sharePlan()">SHARE</ion-button>
+<ion-footer *ngIf="currentUser == planOwnerID">
+  <ion-toolbar padding-horizontal>
+  <ion-button expand="block" color="natureGreen" *ngIf="isShown == false" (click)="sharePlan(true)">SHARE</ion-button>
+  <ion-button expand="block" color="natureGreen" *ngIf="isShown == true" (click)="sharePlan(false)">UNSHARE</ion-button>
+  </ion-toolbar>
 </ion-footer>

@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -14,7 +14,7 @@ declare var google;
   templateUrl: './tripplanner.page.html',
   styleUrls: ['./tripplanner.page.scss'],
 })
-export class TripplannerPage implements OnInit, AfterViewInit {
+export class TripplannerPage implements OnInit {
 
   planID = null;
   startInput: string;
@@ -51,14 +51,14 @@ export class TripplannerPage implements OnInit, AfterViewInit {
 
     this.planID = this.route.snapshot.params['id'];
     if(this.planID){
-      console.log(this.planID);
+      //console.log(this.planID);
     };
   }
 
-  ngAfterViewInit(){
-    this.setupPlaceChangedListener(this.originAutocomplete, 'ORIG');
-    this.setupPlaceChangedListener(this.destinationAutocomplete, 'DEST');
-  }
+  // ionListener(){
+  //   this.setupPlaceChangedListener(this.originAutocomplete, 'ORIG');
+  //   this.setupPlaceChangedListener(this.destinationAutocomplete, 'DEST');
+  // }
 
   setupPlaceChangedListener(autocomplete, mode){
     var me = this;
@@ -131,7 +131,7 @@ export class TripplannerPage implements OnInit, AfterViewInit {
         }, (response, status) => {
           if(status === 'OK'){
           that.directionsDisplay.setDirections(response);
-          console.log(response);
+          //console.log(response);
           }
           else{
             console.log("failed due to: " + status);
@@ -146,7 +146,7 @@ export class TripplannerPage implements OnInit, AfterViewInit {
     loadingBar.present();
     
     const myLatLng = await this.getLocation();
-    console.log(myLatLng);
+    //console.log(myLatLng);
     const mapElement: HTMLElement = document.getElementById('map');
     this.mapRef = new google.maps.Map( mapElement, { 
       center: myLatLng,
@@ -157,7 +157,7 @@ export class TripplannerPage implements OnInit, AfterViewInit {
     } );
     google.maps.event
     .addListenerOnce( this.mapRef, 'idle', () => {
-      console.log("do something once map is loaded");
+      //console.log("do something once map is loaded");
       loadingBar.dismiss();
     } );
     this.directionsDisplay.setMap(this.mapRef);

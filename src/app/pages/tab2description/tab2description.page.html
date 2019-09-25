@@ -3,13 +3,27 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
     </ion-buttons>
-    <ion-title>Description</ion-title>
+    <ion-title>{{headerName}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="planOwnerID != currentUser">
   <ion-item>
-    <ion-text text-wrap>description here</ion-text>
+    <ion-textarea disabled readonly >{{descriptionText}}</ion-textarea>
   </ion-item>
 
 </ion-content>
+
+<ion-content *ngIf="planOwnerID == currentUser">
+  <ion-item>
+    <ion-textarea [(ngModel)]="descriptionText"></ion-textarea>
+  </ion-item>
+  
+</ion-content>
+
+
+<ion-footer *ngIf="planOwnerID == currentUser">
+  <ion-toolbar padding-horizontal>
+    <ion-button expand="block" color="natureGreen" (click)="editDescription(descriptionText)">SAVE EDIT</ion-button>
+  </ion-toolbar>
+</ion-footer>

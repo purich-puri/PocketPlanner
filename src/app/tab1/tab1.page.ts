@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { PlanService } from '../services/plan.service';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from '../services/auth.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-tab1',
@@ -16,22 +18,20 @@ export class Tab1Page {
   constructor(
     private router: Router,
     private planService: PlanService,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
   ) {}
 
   ngOnInit(){
     this.afAuth.auth.onAuthStateChanged(user => {
       if(user){
         //console.log(user);
-        this.plans = this.planService.getPlans();
       }
       else{
         console.log("not logged in");
       }
     }); 
+
+    this.plans = this.planService.getAllPlans();
   }
 
-  async addViewCount(){
-    
-  }
 }
