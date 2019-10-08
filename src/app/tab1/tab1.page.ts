@@ -11,14 +11,16 @@ import { AngularFirestore } from '@angular/fire/firestore';
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit {
 
   plans: Observable<any>;
+
 
   constructor(
     private router: Router,
     private planService: PlanService,
     private afAuth: AngularFireAuth,
+    private db: AngularFirestore
   ) {}
 
   ngOnInit(){
@@ -27,11 +29,12 @@ export class Tab1Page {
         //console.log(user);
       }
       else{
-        console.log("not logged in");
+        //console.log("not logged in");
       }
     }); 
 
     this.plans = this.planService.getAllPlans();
+
   }
 
 }

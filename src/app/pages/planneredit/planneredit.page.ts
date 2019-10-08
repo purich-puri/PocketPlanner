@@ -166,7 +166,7 @@ export class PlannereditPage implements OnInit {
           //console.log(response);
           }
           else{
-            console.log("failed due to: " + status);
+            //console.log("failed due to: " + status);
           }
         }
       )

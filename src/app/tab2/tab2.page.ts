@@ -26,10 +26,14 @@ export class Tab2Page implements OnInit {
         this.plans = this.planService.getPlans();
       }
       else{
-        console.log("not logged in");
+        //console.log("not logged in");
       }
     });
     
+  }
+
+  ionViewWillEnter(){
+    this.ngOnInit();
   }
 
   gotoPage(){

@@ -3,13 +3,23 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { take, map, tap } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AuthService } from '../services/auth.service';
  
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
  
-  constructor(private router: Router, private afAuth: AngularFireAuth) { }
+  constructor(
+    private router: Router, 
+    private afAuth: AngularFireAuth,
+    private db: AngularFirestore,
+    private authService: AuthService
+    ) 
+    {
+      
+    }
  
   canActivate(): Observable<boolean> {
     return this.afAuth.authState.pipe(
@@ -20,6 +30,7 @@ export class AuthGuard implements CanActivate {
           this.router.navigateByUrl('/login');
         }
       })
-    ); 
+    );
   }
+
 }

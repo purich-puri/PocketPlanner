@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { PickerController } from '@ionic/angular';
 import { PickerOptions } from '@ionic/core';
 import { empty } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-createmyplan',
@@ -19,18 +21,35 @@ export class CreatemyplanPage implements OnInit {
   constructor(
     private planService: PlanService,
     private router: Router,
-    private pickerCtrl: PickerController
+    private pickerCtrl: PickerController,
+    private afAuth: AngularFireAuth,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
+  
   }
 
   createPlan(){
     if(this.title != ''){
-      this.planService.createPlan(this.title, this.description)
-      .then( res => {
-        this.router.navigate(['/tabs/tab2']);
-      })
+      this.afAuth.auth.onAuthStateChanged(user => {
+        if(user){
+          console.log(user);
+          this.planService.createPlan(this.title, this.description)
+          .then( res => {
+            this.router.navigate(['/tabs/tab2']);
+          })
+        }
+        else{
+          this.authService.createAnonID()
+          .then( res => {
+            this.planService.createPlan(this.title, this.description)
+            .then( res => {
+              this.router.navigate(['/tabs/tab2']);
+            })
+          })
+        }
+      });
     }
     else{
       console.log("title empty");

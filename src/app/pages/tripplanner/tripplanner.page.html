@@ -14,15 +14,16 @@
     <ion-list>
       <ion-item>
         <ion-label>From:</ion-label>
-        <ion-input [(ngModel)]="startInput" type="text" placeholder="Destination A"></ion-input>
+        <!-- <ion-input [(ngModel)]="startInput" (ionChange)="startListen()" type="text" placeholder="Destination A"></ion-input> -->
+        <input ngx-google-places-autocomplete [(ngModel)]="formattedAddress" (ionChange)="handleAddressChange($event)"/>
       </ion-item>
 
       <ion-item>
         <ion-label>To:</ion-label>
-        <ion-input [(ngModel)]="endInput" type="text" placeholder="Destination B"></ion-input>
+        <ion-input [(ngModel)]="endInput" (ionChange)="calculateAndDisplayRoute()" type="text" placeholder="Destination B"></ion-input>
       </ion-item>
 
-      <ion-button class="ion-padding-horizontal" expand="block" type="submit" (click)="calculateAndDisplayRoute()">GET DIRECTION</ion-button>
+      <!-- <ion-button class="ion-padding-horizontal" expand="block" type="submit" (click)="calculateAndDisplayRoute()">GET DIRECTION</ion-button> -->
     </ion-list>
 
   <div #bottomPanel id="bottomPanel"></div>
@@ -30,7 +31,9 @@
 
 </ion-content>
 
-<ion-footer padding>
-  <ion-button expand="block" (click)="saveDestinationOnline()">SAVE</ion-button>
+<ion-footer>
+  <ion-toolbar padding-horizontal>
+    <ion-button expand="block" color="natureGreen" (click)="saveDestinationOnline()">SAVE</ion-button>
+  </ion-toolbar>
 
 </ion-footer>

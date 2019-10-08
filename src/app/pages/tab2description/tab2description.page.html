@@ -16,6 +16,9 @@
 
 <ion-content *ngIf="planOwnerID == currentUser">
   <ion-item>
+    <ion-input style="text-align: center" [(ngModel)]="headerName"></ion-input>
+  </ion-item>
+  <ion-item>
     <ion-textarea [(ngModel)]="descriptionText"></ion-textarea>
   </ion-item>
   
@@ -24,6 +27,6 @@
 
 <ion-footer *ngIf="planOwnerID == currentUser">
   <ion-toolbar padding-horizontal>
-    <ion-button expand="block" color="natureGreen" (click)="editDescription(descriptionText)">SAVE EDIT</ion-button>
+    <ion-button expand="block" color="natureGreen" (click)="editDescription(headerName, descriptionText)">SAVE EDIT</ion-button>
   </ion-toolbar>
 </ion-footer>

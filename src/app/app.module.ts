@@ -18,6 +18,9 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { FilterPipe } from './pipes/filter.pipe';
 
+import { IonicStorageModule } from '@ionic/storage';
+import { GooglePlaceModule } from "ngx-google-places-autocomplete";
+
 @NgModule({
   declarations: [AppComponent, FilterPipe],
   entryComponents: [],
@@ -28,7 +31,9 @@ import { FilterPipe } from './pipes/filter.pipe';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    IonicStorageModule.forRoot(),
+    GooglePlaceModule
   ],
   providers: [
     StatusBar,

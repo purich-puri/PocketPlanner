@@ -14,7 +14,7 @@ import { ToastController } from '@ionic/angular';
 })
 export class Tab2descriptionPage implements OnInit {
   descriptionText = "";
-  headerName = "Description";
+  headerName = "";
   planOwner: any;
   planOwnerID = null;
   currentUser = null;
@@ -65,12 +65,12 @@ export class Tab2descriptionPage implements OnInit {
       
   }
 
-  editDescription(description){
-    this.planService.editDescriptionInfo(this.planID, description)
+  editDescription(title, description){
+    this.planService.editDescriptionInfo(this.planID, title, description)
     .then(async (res) => {
       let toast = await this.toastCtrl.create({
         duration: 2000,
-        color: 'primary',
+        color: 'natureGreen',
         message: 'Description has been edited!'
       });
       toast.present();

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tab4"></ion-back-button>
+      <ion-back-button defaultHref="/tabs"></ion-back-button>
     </ion-buttons>
     <ion-title>REGISTER</ion-title>
   </ion-toolbar>
@@ -19,6 +19,11 @@
             <ion-label>Password:</ion-label>
             <ion-input type="password" placeholder="minimum 6 characters" formControlName="password"></ion-input>
           </ion-item>
+
+          <ion-item>
+              <ion-label>Confirm Password:</ion-label>
+              <ion-input type="password" placeholder="minimum 6 characters" formControlName="passwordCheck"></ion-input>
+            </ion-item>
     
           <ion-item>
             <ion-label>Display Name:</ion-label>

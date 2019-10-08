@@ -65,9 +65,10 @@ export class PlanService {
     });
   }
 
-  editDescriptionInfo(planID, description){
+  editDescriptionInfo(planID, editTitle, editDescription){
     return this.db.doc(`allPlans/${planID}`).update({
-      description
+      title: editTitle,
+      description: editDescription
     });
   }
 

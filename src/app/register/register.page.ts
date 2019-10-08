@@ -25,6 +25,7 @@ export class RegisterPage implements OnInit {
     this.registerForm = this.formBuilder.group({
       email:[ '', [Validators.required, Validators.email] ],
       password:[ '', [Validators.required, Validators.minLength(6)] ],
+      passwordCheck:[ '', [Validators.required, Validators.minLength(6)] ],
       nickname:[ '', [Validators.required] ] 
     });
   }
@@ -39,22 +40,32 @@ export class RegisterPage implements OnInit {
         });
         alert.then(alert => alert.present());
       } else {
-        this.authService.register(this.registerForm.value).then(async (res) => {
-          let toast = await this.toastctrl.create({
+        if(this.registerForm.get('password').value == this.registerForm.get('passwordCheck').value){
+          this.authService.convertAnon(this.registerForm.value).then(async (res) => {
+            let toast = await this.toastctrl.create({
+              duration: 2000,
+              color: 'natureGreen',
+              message: 'Successfully created a new Account!'
+            });
+            toast.present();
+            this.router.navigateByUrl('');
+          }, async (err) => {
+            let alert = await this.alertctrl.create({
+              header: 'Error',
+              message: err.message,
+              buttons: ['CONFIRM']
+            });
+            alert.present();
+          })
+        }
+        else{
+          let toast = this.toastctrl.create({
             duration: 2000,
-            color: 'primary',
-            message: 'Successfully created a new Account!'
+            color: 'danger',
+            message: 'Password incorrect!'
           });
-          toast.present();
-          this.router.navigateByUrl('');
-        }, async (err) => {
-          let alert = await this.alertctrl.create({
-            header: 'Error',
-            message: err.message,
-            buttons: ['CONFIRM']
-          });
-          alert.present();
-        })
+          toast.then(toast => toast.present());
+        }
       }
     })
   }

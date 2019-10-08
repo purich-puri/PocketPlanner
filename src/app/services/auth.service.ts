@@ -35,15 +35,41 @@ export class AuthService {
     })
    }
  
-  register(credentials: UserCredentials) {
-    return this.afAuth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password)
-      .then((data) => {
-        return this.db.doc(`users/${data.user.uid}`).set({
-          nickname: credentials.nickname,
-          email: data.user.email,
-          created: firebase.firestore.FieldValue.serverTimestamp()
-        });
+  // register(credentials: UserCredentials) {
+  //   return this.afAuth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password)
+  //     .then((data) => {
+  //       return this.db.doc(`users/${data.user.uid}`).set({
+  //         nickname: credentials.nickname,
+  //         email: data.user.email,
+  //         created: firebase.firestore.FieldValue.serverTimestamp()
+  //       });
+  //     });
+  // }
+
+  createAnonID(){
+    return this.afAuth.auth.signInAnonymously()
+    .then((data) => {
+      this.db.doc(`users/${data.user.uid}`).set({
+        nickname: "",
+        email: "",
+        created: firebase.firestore.FieldValue.serverTimestamp()
       });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  convertAnon(credentials: UserCredentials){
+    var credential = firebase.auth.EmailAuthProvider.credential(credentials.email, credentials.password);
+    return this.afAuth.auth.currentUser.linkWithCredential(credential)
+    .then((data) => {
+      return this.db.doc(`users/${data.user.uid}`).set({
+        nickname: credentials.nickname,
+        email: data.user.email,
+        created: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    });
   }
  
   isNicknameAvailable(name) {
