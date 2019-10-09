@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { AlertController, ToastController, LoadingController } from '@ionic/angular';
 import { PlanService } from 'src/app/services/plan.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -33,6 +33,11 @@ export class PlannereditPage implements OnInit {
 
   directionsService = new google.maps.DirectionsService;
   directionsDisplay = new google.maps.DirectionsRenderer;
+  googleAutocomplete = new google.maps.places.AutocompleteService();
+
+  autocompleteItems: any[];
+  autocompleteItems2: any[];
+  location: any;
 
   constructor(
     private geoLocation: Geolocation,
@@ -44,8 +49,12 @@ export class PlannereditPage implements OnInit {
     private afAuth: AngularFireAuth,
     private router: Router,
     private route: ActivatedRoute,
-    private db: AngularFirestore
-  ) { }
+    private db: AngularFirestore,
+    private zone: NgZone
+  ) { 
+    this.autocompleteItems = [];
+    this.autocompleteItems2 = [];
+  }
 
   ngOnInit() {
     this.planID = this.route.snapshot.params['id'];
@@ -73,8 +82,62 @@ export class PlannereditPage implements OnInit {
     this.getPlanner();  
   }
 
-  ionViewWillEnter(){
-    this.ngOnInit();
+  ionViewDidEnter(){
+    this.calculateDistance();
+  }
+
+  startListen(){
+    //this.setupPlaceChangedListener(this.originAutocomplete);
+    if (this.startInput == '' || this.startInput == null || this.startInput.trim() == '') {
+      this.autocompleteItems = [];
+      return;
+    }
+    this.googleAutocomplete.getPlacePredictions({ input: this.startInput },
+    (predictions, status) => {
+      this.autocompleteItems = [];
+      this.zone.run(() => {
+        predictions.forEach((prediction) => {
+          this.autocompleteItems.push(prediction);
+        });
+      });
+    });
+    
+    this.calculateDistance();
+  }
+
+  startListen2(){
+    //this.setupPlaceChangedListener(this.originAutocomplete);
+    if (this.endInput == '' || this.endInput == null || this.endInput.trim() == '') {
+      this.autocompleteItems2 = [];
+      return;
+    }
+    this.googleAutocomplete.getPlacePredictions({ input: this.endInput },
+    (predictions, status) => {
+      this.autocompleteItems2 = [];
+      this.zone.run(() => {
+        predictions.forEach((prediction) => {
+          this.autocompleteItems2.push(prediction);
+        });
+      });
+    });
+    
+    this.calculateDistance();
+  }
+
+  selectSearchResult(item) {
+    //console.log(item)
+    this.location = item
+    this.startInput = this.location.description;
+    this.autocompleteItems = [];
+    this.calculateDistance();
+  }
+
+  selectSearchResult2(item) {
+    //console.log(item)
+    this.location = item
+    this.endInput = this.location.description;
+    this.autocompleteItems2 = [];
+    this.calculateDistance();
   }
 
   getPlanner(){
@@ -96,7 +159,6 @@ export class PlannereditPage implements OnInit {
           this.planOwnerID = this.planOwner.id;
         })
       ).subscribe();
-      
     }
   }
 
@@ -115,7 +177,7 @@ export class PlannereditPage implements OnInit {
     .then(async (res) => {
       let toast = await this.toastCtrl.create({
         duration: 2000,
-        color: 'primary',
+        color: 'natureGreen',
         message: 'Edited destination has been saved!'
       });
       toast.present();

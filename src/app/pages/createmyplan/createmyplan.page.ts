@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PlanService } from 'src/app/services/plan.service';
 import { Router } from '@angular/router';
-import { PickerController } from '@ionic/angular';
+import { PickerController, ToastController } from '@ionic/angular';
 import { PickerOptions } from '@ionic/core';
 import { empty } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -16,14 +16,15 @@ export class CreatemyplanPage implements OnInit {
 
   title = '';
   description = '';
-  countryName = 'pick a country';
+  // countryName = 'pick a country';
 
   constructor(
     private planService: PlanService,
     private router: Router,
     private pickerCtrl: PickerController,
     private afAuth: AngularFireAuth,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
@@ -52,39 +53,45 @@ export class CreatemyplanPage implements OnInit {
       });
     }
     else{
-      console.log("title empty");
+      //console.log("title empty");
+      let toast = this.toastCtrl.create({
+        duration: 2000,
+        color: 'danger',
+        message: 'Title cannot be empty!'
+      });
+      toast.then(toast =>  toast.present());
     }
   }
 
-  async showPicker(){
-    let pickOpt: PickerOptions = {
-      backdropDismiss: false,
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-        },
-        {
-          text: 'Done'
-        }
-      ],
-      columns: [
-        {
-          name: 'countryName',
-          options: [
-            { text: 'countryName1', value: '1' },
-            { text: 'countryName2', value: '2' },
-          ]
-        }
-      ]
-    };
-    let picker = await this.pickerCtrl.create(pickOpt);
-    picker.present();
-    picker.onDidDismiss().then( async data => {
-      let col = await picker.getColumn('countryName');
-      this.countryName = col.options[col.selectedIndex].text
-    });
+  // async showPicker(){
+  //   let pickOpt: PickerOptions = {
+  //     backdropDismiss: false,
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //       },
+  //       {
+  //         text: 'Done'
+  //       }
+  //     ],
+  //     columns: [
+  //       {
+  //         name: 'countryName',
+  //         options: [
+  //           { text: 'countryName1', value: '1' },
+  //           { text: 'countryName2', value: '2' },
+  //         ]
+  //       }
+  //     ]
+  //   };
+  //   let picker = await this.pickerCtrl.create(pickOpt);
+  //   picker.present();
+  //   picker.onDidDismiss().then( async data => {
+  //     let col = await picker.getColumn('countryName');
+  //     this.countryName = col.options[col.selectedIndex].text
+  //   });
 
-  }
+  // }
 
 }

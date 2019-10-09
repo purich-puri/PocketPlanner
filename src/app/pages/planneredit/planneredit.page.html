@@ -19,13 +19,25 @@
       <ion-list *ngIf="currentUser == planOwnerID">
         <ion-item>
           <ion-label>From:</ion-label>
-          <ion-input [(ngModel)]="startInput" clearInput (ionInput)="calculateDistance()" type="text"></ion-input>
+          <ion-input [(ngModel)]="startInput" clearInput (ionInput)="startListen()" type="text"></ion-input>
         </ion-item>
+
+        <ion-list [hidden]="autocompleteItems.length == 0 || startInput == ''">
+            <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+              {{ item.description }}
+            </ion-item>
+        </ion-list>
   
         <ion-item>
           <ion-label>To:</ion-label>
-          <ion-input [(ngModel)]="endInput" clearInput (ionInput)="calculateDistance()" type="text"></ion-input>
+          <ion-input [(ngModel)]="endInput" clearInput (ionInput)="startListen2()" type="text"></ion-input>
         </ion-item>
+      </ion-list>
+
+      <ion-list [hidden]="autocompleteItems2.length == 0 || endInput == ''">
+          <ion-item *ngFor="let item of autocompleteItems2" tappable (click)="selectSearchResult2(item)">
+            {{ item.description }}
+          </ion-item>
       </ion-list>
 
       <ion-list *ngIf="currentUser != planOwnerID">

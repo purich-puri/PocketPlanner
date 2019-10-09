@@ -79,6 +79,7 @@ export class PlannerPage implements OnInit {
 
   ionViewWillEnter(){
     this.ngOnInit();
+    
   }
 
   goToPage(){
