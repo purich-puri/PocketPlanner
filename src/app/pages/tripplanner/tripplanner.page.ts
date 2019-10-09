@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -21,15 +21,19 @@ export class TripplannerPage implements OnInit {
 
   directionsService = new google.maps.DirectionsService;
   directionsDisplay = new google.maps.DirectionsRenderer;
+  googleAutocomplete = new google.maps.places.AutocompleteService();
 
-  originPlaceId = null;
   destinationPlaceId = null;
 
-  // originAutocomplete: any;
+  originAutocomplete = new google.maps.places.Autocomplete(this.startInput);
   // destinationAutocomplete = new google.maps.places.Autocomplete(this.endInput);
-  
+
+  autocompleteItems: any[];
+  autocompleteItems2: any[];
+  location: any;
+    
   mapRef = null;
-  formattedAddress = "";
+  newmap = null;
 
   constructor(
     private geoLocation: Geolocation,
@@ -39,9 +43,11 @@ export class TripplannerPage implements OnInit {
     private router: Router,
     private planService: PlanService,
     private afAuth: AngularFireAuth,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private zone: NgZone
   ) { 
-
+    this.autocompleteItems = [];
+    this.autocompleteItems2 = [];
   }
 
   ngOnInit() {   
@@ -54,43 +60,88 @@ export class TripplannerPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    this.ngOnInit();
+    this.loadMap();
   }
 
-  // startListen(){
-  //   this.originAutocomplete = new google.maps.places.Autocomplete(this.startInput, {types:["places"]});
-  //   this.setupPlaceChangedListener(this.originAutocomplete, 'ORIG');
-  //   //this.setupPlaceChangedListener(this.destinationAutocomplete, 'DEST');
-  // }
+  startListen(){
+    //this.setupPlaceChangedListener(this.originAutocomplete);
+    if (this.startInput == '' || this.startInput == null || this.startInput.trim() == '') {
+      this.autocompleteItems = [];
+      return;
+    }
+    this.googleAutocomplete.getPlacePredictions({ input: this.startInput },
+    (predictions, status) => {
+      this.autocompleteItems = [];
+      this.zone.run(() => {
+        predictions.forEach((prediction) => {
+          this.autocompleteItems.push(prediction);
+        });
+      });
+    });
+    
+    this.calculateAndDisplayRoute();
+  }
 
-  // setupPlaceChangedListener(autocomplete, mode){
-  //   var me = this;
-  //   autocomplete.bindTo('bounds', this.mapRef);
+  startListen2(){
+    //this.setupPlaceChangedListener(this.originAutocomplete);
+    if (this.endInput == '' || this.endInput == null || this.endInput.trim() == '') {
+      this.autocompleteItems2 = [];
+      return;
+    }
+    this.googleAutocomplete.getPlacePredictions({ input: this.endInput },
+    (predictions, status) => {
+      this.autocompleteItems2 = [];
+      this.zone.run(() => {
+        predictions.forEach((prediction) => {
+          this.autocompleteItems2.push(prediction);
+        });
+      });
+    });
+    
+    this.calculateAndDisplayRoute();
+  }
+
+  selectSearchResult(item) {
+    //console.log(item)
+    this.location = item
+    this.startInput = this.location.description;
+    this.autocompleteItems = [];
+    this.calculateAndDisplayRoute();
+  }
+
+  selectSearchResult2(item) {
+    //console.log(item)
+    this.location = item
+    this.endInput = this.location.description;
+    this.autocompleteItems2 = [];
+    this.calculateAndDisplayRoute();
+  }
+
+//DOES NOT WORK
+  // setupPlaceChangedListener(autocomplete){
   //   autocomplete.setFields(['place_id']);
+  //   autocomplete.bindTo('bounds', this.newmap);
 
-  //   google.maps.event.addListenerOnce(autocomplete, 'place_changed', () => {
+  //   google.maps.event.addListener(autocomplete, 'place_changed',() =>{
   //     var place = autocomplete.getPlace();
   //     console.log(place);
-
-  //     if (!place.place_id) {
-  //       return;
-  //     }
-  //     if (mode == 'ORIG') {
-  //       me.startInput = place.place_id;
-  //     } else {
-  //       me.destinationPlaceId = place.place_id;
-  //     }
-  //   });
-      
+  // });     
   // }
-
-  public handleAddressChange(address: any) {
-    this.formattedAddress = address.formatted_address;
-}
 
   saveDestinationOnline(){
     // console.log(this.startInput);
     // console.log(this.endInput);
+    if(this.startInput == null || this.startInput == '' || this.startInput.trim() == ''|| 
+       this.endInput == null || this.endInput == '' || this.endInput.trim() == ''){
+      let toast = this.toastCtrl.create({
+        duration: 2000,
+        color: 'danger',
+        message: 'please fill in all field!'
+      });
+      toast.then(toast =>  toast.present());
+      return
+    }
+
     const that = this;
     this.directionsService.route(
       {
@@ -122,12 +173,7 @@ export class TripplannerPage implements OnInit {
 
   async calculateAndDisplayRoute(){
     if(this.startInput == null || this.endInput == null){
-      let toast = await this.toastCtrl.create({
-        duration: 2000,
-        color: 'danger',
-        message: 'Please fill all destination'
-      });
-      toast.present();
+      return
     }
     else{
       const that = this;
@@ -152,25 +198,44 @@ export class TripplannerPage implements OnInit {
   async loadMap(){
     const loadingBar = await this.loadCtrl.create();
     loadingBar.present();
-    
-    const myLatLng = await this.getLocation();
-    //console.log(myLatLng);
-    const mapElement: HTMLElement = document.getElementById('map');
-    this.mapRef = new google.maps.Map( mapElement, { 
-      center: myLatLng,
+    const newmyLatLng = await this.getLocation();
+    this.newmap = new google.maps.Map(document.getElementById('map'), {
+      center: newmyLatLng,
       zoom: 15,
       streetViewControl: false,
       mapTypeControl: false,
       fullscreenControl: false
-    } );
-    google.maps.event
-    .addListenerOnce( this.mapRef, 'idle', () => {
+    });
+    google.maps.event.addListenerOnce( this.newmap, 'idle', () => {
       //console.log("do something once map is loaded");
       loadingBar.dismiss();
-    } );
-    this.directionsDisplay.setMap(this.mapRef);
+    });
+    this.directionsDisplay.setMap(this.newmap);
     this.directionsDisplay.setPanel(document.getElementById('bottomPanel'));
   }
+
+//REDUNDANT
+  // async loadMap(){
+  //   const loadingBar = await this.loadCtrl.create();
+  //   loadingBar.present();
+    
+  //   const myLatLng = await this.getLocation();
+  //   //console.log(myLatLng);
+  //   const mapElement: HTMLElement = document.getElementById('map');
+  //   this.mapRef = new google.maps.Map( mapElement, { 
+  //     center: myLatLng,
+  //     zoom: 15,
+  //     streetViewControl: false,
+  //     mapTypeControl: false,
+  //     fullscreenControl: false
+  //   } );
+  //   google.maps.event.addListenerOnce( this.mapRef, 'idle', () => {
+  //     //console.log("do something once map is loaded");
+  //     loadingBar.dismiss();
+  //   } );
+  //   this.directionsDisplay.setMap(this.mapRef);
+  //   this.directionsDisplay.setPanel(document.getElementById('bottomPanel'));
+  // }
 
   async getLocation(){
     const myPosition = await this.geoLocation.getCurrentPosition();

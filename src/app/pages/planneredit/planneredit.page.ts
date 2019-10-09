@@ -28,7 +28,8 @@ export class PlannereditPage implements OnInit {
 
   startInput: string;
   endInput: string;
-  mapRef= null;
+  //mapRef= null;
+  newmap = null
 
   directionsService = new google.maps.DirectionsService;
   directionsDisplay = new google.maps.DirectionsRenderer;
@@ -69,10 +70,11 @@ export class PlannereditPage implements OnInit {
 
     this.loadMap();
     this.currentUser = this.authService.currentUserId;
-    this.getPlanner();
+    this.getPlanner();  
+  }
 
-    
-    
+  ionViewWillEnter(){
+    this.ngOnInit();
   }
 
   getPlanner(){
@@ -99,6 +101,16 @@ export class PlannereditPage implements OnInit {
   }
 
   saveEdit(){
+    if(this.startInput == null || this.startInput == '' || this.startInput.trim() == ''|| 
+       this.endInput == null || this.endInput == '' || this.endInput.trim() == ''){
+      let toast = this.toastCtrl.create({
+        duration: 2000,
+        color: 'danger',
+        message: 'please fill in all field!'
+      });
+      toast.then(toast =>  toast.present());
+      return
+    }
     this.planService.editDestination(this.planID, this.destID, this.startInput, this.endInput)
     .then(async (res) => {
       let toast = await this.toastCtrl.create({
@@ -146,12 +158,7 @@ export class PlannereditPage implements OnInit {
 
   async calculateDistance(){
     if(this.startInput == null || this.endInput == null){
-      let toast = await this.toastCtrl.create({
-        duration: 2000,
-        color: 'danger',
-        message: 'Please fill all destination'
-      });
-      toast.present();
+      return
     }
     else{
       const that = this;
@@ -176,25 +183,45 @@ export class PlannereditPage implements OnInit {
   async loadMap(){
     const loadingBar = await this.loadCtrl.create();
     loadingBar.present();
-    
-    const myLatLng = await this.getLocation();
-    //console.log(myLatLng);
-    const mapElement: HTMLElement = document.getElementById('map');
-    this.mapRef = new google.maps.Map( mapElement, { 
-      center: myLatLng,
+    const newmyLatLng = await this.getLocation();
+    this.newmap = new google.maps.Map(document.getElementById('map'), {
+      center: newmyLatLng,
       zoom: 15,
       streetViewControl: false,
       mapTypeControl: false,
       fullscreenControl: false
-    } );
-    google.maps.event
-    .addListenerOnce( this.mapRef, 'idle', () => {
+    });
+    google.maps.event.addListenerOnce( this.newmap, 'idle', () => {
       //console.log("do something once map is loaded");
       loadingBar.dismiss();
-    } );
-    this.directionsDisplay.setMap(this.mapRef);
+    });
+    this.directionsDisplay.setMap(this.newmap);
     this.directionsDisplay.setPanel(document.getElementById('bottomPanel'));
   }
+
+//REDUNDANT
+  // async loadMap(){
+  //   const loadingBar = await this.loadCtrl.create();
+  //   loadingBar.present();
+    
+  //   const myLatLng = await this.getLocation();
+  //   //console.log(myLatLng);
+  //   const mapElement: HTMLElement = document.getElementById('map');
+  //   this.mapRef = new google.maps.Map( mapElement, { 
+  //     center: myLatLng,
+  //     zoom: 15,
+  //     streetViewControl: false,
+  //     mapTypeControl: false,
+  //     fullscreenControl: false
+  //   } );
+  //   google.maps.event
+  //   .addListenerOnce( this.mapRef, 'idle', () => {
+  //     //console.log("do something once map is loaded");
+  //     loadingBar.dismiss();
+  //   } );
+  //   this.directionsDisplay.setMap(this.mapRef);
+  //   this.directionsDisplay.setPanel(document.getElementById('bottomPanel'));
+  // }
 
   async getLocation(){
     const myPosition = await this.geoLocation.getCurrentPosition();

@@ -77,6 +77,10 @@ export class PlannerPage implements OnInit {
 
   }
 
+  ionViewWillEnter(){
+    this.ngOnInit();
+  }
+
   goToPage(){
     this.router.navigate(["/tripplanner/" + this.planID]);
   }

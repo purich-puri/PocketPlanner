@@ -14,17 +14,31 @@
     <ion-list>
       <ion-item>
         <ion-label>From:</ion-label>
-        <!-- <ion-input [(ngModel)]="startInput" (ionChange)="startListen()" type="text" placeholder="Destination A"></ion-input> -->
-        <input ngx-google-places-autocomplete [(ngModel)]="formattedAddress" (ionChange)="handleAddressChange($event)"/>
+        <ion-input [(ngModel)]="startInput" (ionInput)="startListen()" clearInput type="text" placeholder="Destination A"></ion-input>
       </ion-item>
+
+      <ion-list [hidden]="autocompleteItems.length == 0 || startInput == ''">
+          <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+            {{ item.description }}
+          </ion-item>
+      </ion-list>
+      
 
       <ion-item>
         <ion-label>To:</ion-label>
-        <ion-input [(ngModel)]="endInput" (ionChange)="calculateAndDisplayRoute()" type="text" placeholder="Destination B"></ion-input>
+        <ion-input [(ngModel)]="endInput" (ionInput)="startListen2()" clearInput type="text" placeholder="Destination B"></ion-input>
       </ion-item>
+
+      <ion-list [hidden]="autocompleteItems2.length == 0 || endInput == ''">
+          <ion-item *ngFor="let item of autocompleteItems2" tappable (click)="selectSearchResult2(item)">
+            {{ item.description }}
+          </ion-item>
+      </ion-list>
 
       <!-- <ion-button class="ion-padding-horizontal" expand="block" type="submit" (click)="calculateAndDisplayRoute()">GET DIRECTION</ion-button> -->
     </ion-list>
+
+    
 
   <div #bottomPanel id="bottomPanel"></div>
 

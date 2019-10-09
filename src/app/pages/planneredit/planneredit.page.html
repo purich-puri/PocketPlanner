@@ -19,12 +19,12 @@
       <ion-list *ngIf="currentUser == planOwnerID">
         <ion-item>
           <ion-label>From:</ion-label>
-          <ion-input [(ngModel)]="startInput" (ionChange)="calculateDistance()" type="text"></ion-input>
+          <ion-input [(ngModel)]="startInput" clearInput (ionInput)="calculateDistance()" type="text"></ion-input>
         </ion-item>
   
         <ion-item>
           <ion-label>To:</ion-label>
-          <ion-input [(ngModel)]="endInput" (ionChange)="calculateDistance()" type="text"></ion-input>
+          <ion-input [(ngModel)]="endInput" clearInput (ionInput)="calculateDistance()" type="text"></ion-input>
         </ion-item>
       </ion-list>
 
