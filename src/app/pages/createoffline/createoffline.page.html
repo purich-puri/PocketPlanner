@@ -8,5 +8,18 @@
 </ion-header>
 
 <ion-content padding>
+    <ion-list>
+        <ion-item lines="full">
+          <ion-label>Title: </ion-label>
+          <ion-input placeholder="Plan name" [(ngModel)]="trip.name"></ion-input>
+        </ion-item>
+    
+        <ion-item lines="none">
+          <ion-label>Description:</ion-label>
+          <ion-textarea auto-grow="true" placeholder="Enter Description here" [(ngModel)]="trip.description"></ion-textarea>
+        </ion-item>
+      </ion-list>
+    
+      <!-- <ion-button color="natureGreen" class="bottomButton" expand="block" (click)="createPlan()">CREATE</ion-button> -->
 
 </ion-content>

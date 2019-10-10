@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PlanService } from 'src/app/services/plan.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 
+
 declare var google;
 
 @Component({

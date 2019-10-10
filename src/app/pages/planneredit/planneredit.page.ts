@@ -50,7 +50,7 @@ export class PlannereditPage implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private db: AngularFirestore,
-    private zone: NgZone
+    private zone: NgZone,
   ) { 
     this.autocompleteItems = [];
     this.autocompleteItems2 = [];

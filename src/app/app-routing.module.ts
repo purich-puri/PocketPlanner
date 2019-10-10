@@ -22,7 +22,8 @@ const routes: Routes = [
   { path: 'tab2description/:id', loadChildren: './pages/tab2description/tab2description.module#Tab2descriptionPageModule' },
   { path: 'planneredit', loadChildren: './pages/planneredit/planneredit.module#PlannereditPageModule' },
   { path: 'planneredit/:id/:id2', loadChildren: './pages/planneredit/planneredit.module#PlannereditPageModule' },
-  { path: 'createoffline', loadChildren: './pages/createoffline/createoffline.module#CreateofflinePageModule' }
+  { path: 'createoffline', loadChildren: './pages/createoffline/createoffline.module#CreateofflinePageModule' },
+  { path: 'planneroffline/:id', loadChildren: './pages/planneroffline/planneroffline.module#PlannerofflinePageModule' }
 ];
 @NgModule({
   imports: [
