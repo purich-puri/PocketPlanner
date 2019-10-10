@@ -13,7 +13,9 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-button expand="block" color="natureGreen" (click)="goToPage()">Add destination</ion-button>
+  <div *ngIf="currentUser == planOwnerID">
+    <ion-button expand="block" color="natureGreen" (click)="goToPage()">Add destination</ion-button>
+  </div>
   <br>
 
   <ion-list>

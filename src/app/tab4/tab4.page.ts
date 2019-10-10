@@ -92,7 +92,7 @@ export class Tab4Page implements OnInit {
       console.log("logged out");
       let toast = await this.toastCtrl.create({
         duration: 2000,
-        color: 'primary',
+        color: 'natureGreen',
         message: 'Good Bye!'
       });
       toast.present();
