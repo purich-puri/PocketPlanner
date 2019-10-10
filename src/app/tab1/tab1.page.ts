@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from '../services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tab1',
@@ -34,7 +35,6 @@ export class Tab1Page implements OnInit {
     }); 
 
     this.plans = this.planService.getAllPlans();
-
   }
 
 }

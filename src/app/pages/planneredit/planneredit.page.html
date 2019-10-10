@@ -20,6 +20,7 @@
      
       <ion-list *ngIf="currentUser == planOwnerID">
         <ion-item>
+          <!-- <ion-icon slot="end" name="swap"></ion-icon> -->
           <ion-label>From:</ion-label>
           <ion-input [(ngModel)]="startInput" clearInput (ionInput)="startListen()" type="text"></ion-input>
         </ion-item>
