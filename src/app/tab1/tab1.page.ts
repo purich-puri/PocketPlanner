@@ -15,6 +15,7 @@ import { filter } from 'rxjs/operators';
 export class Tab1Page implements OnInit {
 
   plans: Observable<any>;
+  data: any;
 
 
   constructor(
@@ -34,7 +35,17 @@ export class Tab1Page implements OnInit {
       }
     }); 
 
-    this.plans = this.planService.getAllPlans();
+    this.planService.getAllPlans();
   }
+
+  // startSearch(ev: any){
+  //   //console.log(ev.target.value);
+  //   // let serVal = ev.target.value;
+  //   // if(serVal != ''){
+  //   //   this.plans = this.data.filter((a) => {
+  //   //     return (a.title.toLowerCase().indexOf(serVal.toLowerCase()) > -1);
+  //   //   })
+  //   // }
+  // }
 
 }

@@ -8,7 +8,7 @@
 
 <ion-content padding>
 
-  <!-- <ion-searchbar [(ngModel)]="searchText" (ionChange)="startSearch" showCancelButton="focus"></ion-searchbar> -->
+  <!-- <ion-searchbar [(ngModel)]="searchText" (ionChange)="startSearch($event)" showCancelButton="focus"></ion-searchbar> -->
 
   <ion-card *ngFor="let plan of plans | async" class="bgWhite">
     <ng-container *ngIf="plan?.isShown == true">
