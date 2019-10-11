@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
     </ion-buttons>
     <ion-title>Edit</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons [hidden]="currentUser != planOwnerID" slot="end">
       <ion-button (click)="delete()">
         <ion-icon color="danger" name="trash" slot="icon-only"></ion-icon>
       </ion-button>
