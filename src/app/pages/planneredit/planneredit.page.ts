@@ -38,6 +38,8 @@ export class PlannereditPage implements OnInit {
   autocompleteItems: any[];
   autocompleteItems2: any[];
   location: any;
+  transitOption = 'TRANSIT';
+  availableTransit: boolean;
 
   constructor(
     private geoLocation: Geolocation,
@@ -103,7 +105,7 @@ export class PlannereditPage implements OnInit {
       });
     });
     
-    this.calculateDistance();
+    //this.calculateDistance();
   }
 
   startListen2(){
@@ -122,8 +124,14 @@ export class PlannereditPage implements OnInit {
       });
     });
     
-    this.calculateDistance();
+    //this.calculateDistance();
   }
+
+  // startChange(event){
+  //   //console.log(event.detail.value);
+  //   this.transitOption = event.detail.value;
+  //   this.calculateDistance();
+  // }
 
   selectSearchResult(item) {
     //console.log(item)
@@ -229,7 +237,7 @@ export class PlannereditPage implements OnInit {
         {
           origin: this.startInput,
           destination: this.endInput,
-          travelMode: 'TRANSIT'
+          travelMode: this.transitOption
         }, (response, status) => {
           if(status === 'OK'){
           that.directionsDisplay.setDirections(response);
@@ -237,6 +245,9 @@ export class PlannereditPage implements OnInit {
           }
           else{
             //console.log("failed due to: " + status);
+            this.transitOption = 'DRIVING'
+            this.calculateDistance();
+            this.transitOption = 'TRANSIT'
           }
         }
       )

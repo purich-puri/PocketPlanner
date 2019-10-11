@@ -18,20 +18,20 @@ export class Tab3Page implements OnInit {
   ) {}
 
   ngOnInit(){
-    this.mapLoad();
+    // this.mapLoad();
   }
 
-  mapLoad(){
-    var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
+  // mapLoad(){
+  //   var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYXF1YXN0cmEiLCJhIjoiY2swNWdxdHh5MnEwZzNjcWRwZHZhb3V4OSJ9.HzC-8uaNaR0649tGnfRzFA';
-    var map = new mapboxgl.Map({
-      container: 'mapbox',
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [151.1,-33.8],
-      zoom: 12
-    });
-  }
+  //   mapboxgl.accessToken = 'pk.eyJ1IjoiYXF1YXN0cmEiLCJhIjoiY2swNWdxdHh5MnEwZzNjcWRwZHZhb3V4OSJ9.HzC-8uaNaR0649tGnfRzFA';
+  //   var map = new mapboxgl.Map({
+  //     container: 'mapbox',
+  //     style: 'mapbox://styles/mapbox/streets-v11',
+  //     center: [151.1,-33.8],
+  //     zoom: 12
+  //   });
+  // }
 
   // search(){
   //   var MapboxGeocoder = require('mapbox-gl/dist/mapbox-gl.js');
@@ -44,9 +44,9 @@ export class Tab3Page implements OnInit {
   //     });
   // }
 
-  gotoPage(){
-    this.router.navigate(['/createoffline']);
-  }
+  // gotoPage(){
+  //   this.router.navigate(['/createoffline']);
+  // }
 
 
 

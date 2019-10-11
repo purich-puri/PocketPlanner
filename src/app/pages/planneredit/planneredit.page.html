@@ -12,11 +12,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <div #map id="map"></div>
-</ion-content>
-
 <ion-content >
+    <div #map id="map"></div>
      
       <ion-list *ngIf="currentUser == planOwnerID">
         <ion-item>
@@ -51,13 +48,21 @@
           <ion-item>
             <ion-label>To: {{endInput}}</ion-label>
           </ion-item>
-        </ion-list>
+      </ion-list>
   
-    <div #bottomPanel id="bottomPanel"></div>
+        <!-- <ion-item>
+            <ion-label>Transport Option</ion-label>
+            <ion-select placeholder="Select One" (ionChange)="startChange($event)" [(ngModel)]="transitOption">
+              <ion-select-option  value="TRANSIT">Public Transport</ion-select-option>
+              <ion-select-option  value="DRIVING">Driving</ion-select-option>
+            </ion-select>
+        </ion-item> -->
+
+      <div #bottomPanel id="bottomPanel"></div>
 
   </ion-content>
   
-  <ion-footer *ngIf="currentUser == planOwnerID">
+  <ion-footer *ngIf="currentUser == planOwnerID" class="hide-on-keyboard-open">
     <ion-toolbar padding-horizontal>
     <ion-button expand="block" color="natureGreen" (click)="saveEdit()">SAVE</ion-button>
     </ion-toolbar>
