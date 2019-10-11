@@ -35,7 +35,7 @@ export class Tab1Page implements OnInit {
       }
     }); 
 
-    this.planService.getAllPlans();
+    this.plans = this.planService.getAllPlans();
   }
 
   // startSearch(ev: any){
