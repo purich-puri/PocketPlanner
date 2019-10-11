@@ -36,6 +36,8 @@ export class TripplannerPage implements OnInit {
   mapRef = null;
   newmap = null;
 
+  transitOption = 'TRANSIT';
+
   constructor(
     private geoLocation: Geolocation,
     private loadCtrl: LoadingController,
@@ -80,7 +82,6 @@ export class TripplannerPage implements OnInit {
       });
     });
     
-    this.calculateAndDisplayRoute();
   }
 
   startListen2(){
@@ -98,8 +99,6 @@ export class TripplannerPage implements OnInit {
         });
       });
     });
-    
-    this.calculateAndDisplayRoute();
   }
 
   selectSearchResult(item) {
@@ -148,7 +147,7 @@ export class TripplannerPage implements OnInit {
       {
         origin: this.startInput,
         destination: this.endInput,
-        travelMode: 'TRANSIT'
+        travelMode: this.transitOption
       }, (response, status) => {
         if(status === 'OK'){
         // that.directionsDisplay.setDirections(response);
@@ -165,7 +164,9 @@ export class TripplannerPage implements OnInit {
         })
         }
         else{
-          console.log("failed due to: " + status);
+          //console.log("failed due to: " + status);
+          this.transitOption = 'DRIVING';
+          this.saveDestinationOnline();
           
         }
       }
@@ -182,7 +183,7 @@ export class TripplannerPage implements OnInit {
         {
           origin: this.startInput,
           destination: this.endInput,
-          travelMode: 'TRANSIT'
+          travelMode: this.transitOption
         }, (response, status) => {
           if(status === 'OK'){
           that.directionsDisplay.setDirections(response);
@@ -190,6 +191,9 @@ export class TripplannerPage implements OnInit {
           }
           else{
             //console.log("failed due to: " + status);
+            this.transitOption = 'DRIVING'
+            this.calculateAndDisplayRoute();
+            this.transitOption = 'TRANSIT'
           }
         }
       )
